@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Gamify - Personal Stats Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Life Gamify</h1>
+            <p>Level up your life, Persona 5 style</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Star Visualization Container -->
+            <div class="star-container">
+                <svg id="statsStar" width="400" height="400" viewBox="0 0 400 400">
+                    <!-- Star will be drawn here by JavaScript -->
+                </svg>
+                <div class="stats-labels">
+                    <div class="stat-label physical" data-stat="physical">Physical</div>
+                    <div class="stat-label mental" data-stat="mental">Mental</div>
+                    <div class="stat-label social" data-stat="social">Social</div>
+                    <div class="stat-label creative" data-stat="creative">Creative</div>
+                    <div class="stat-label productive" data-stat="productive">Productive</div>
+                </div>
+            </div>
+
+            <!-- Activity Input Section -->
+            <div class="activity-section">
+                <h2>Add Activity</h2>
+                <form id="activityForm" class="activity-form">
+                    <div class="form-group">
+                        <label for="activityName">Activity Name:</label>
+                        <input type="text" id="activityName" name="activityName" required placeholder="e.g., Morning jog, Read a book">
+                    </div>
+
+                    <div class="stats-input">
+                        <h3>Assign Points (1-5 per stat): <button type="button" id="intensityGuideBtn" class="help-btn" title="View intensity guidelines">?</button></h3>
+                        <div class="stat-sliders">
+                            <div class="slider-group">
+                                <label for="physicalPoints">Physical:</label>
+                                <input type="range" id="physicalPoints" name="physicalPoints" min="0" max="5" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="mentalPoints">Mental:</label>
+                                <input type="range" id="mentalPoints" name="mentalPoints" min="0" max="5" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="socialPoints">Social:</label>
+                                <input type="range" id="socialPoints" name="socialPoints" min="0" max="5" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="creativePoints">Creative:</label>
+                                <input type="range" id="creativePoints" name="creativePoints" min="0" max="5" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                            <div class="slider-group">
+                                <label for="productivePoints">Productive:</label>
+                                <input type="range" id="productivePoints" name="productivePoints" min="0" max="5" value="0">
+                                <span class="slider-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="activityNotes">Notes (optional):</label>
+                        <textarea id="activityNotes" name="activityNotes" placeholder="Any additional details..."></textarea>
+                    </div>
+
+                    <button type="submit" class="add-activity-btn">Add Activity</button>
+                </form>
+            </div>
+
+            <!-- Stats Summary -->
+            <div class="stats-summary">
+                <h2>Current Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-item physical">
+                        <span class="stat-name">Physical</span>
+                        <span class="stat-value" id="physicalTotal">0</span>
+                    </div>
+                    <div class="stat-item mental">
+                        <span class="stat-name">Mental</span>
+                        <span class="stat-value" id="mentalTotal">0</span>
+                    </div>
+                    <div class="stat-item social">
+                        <span class="stat-name">Social</span>
+                        <span class="stat-value" id="socialTotal">0</span>
+                    </div>
+                    <div class="stat-item creative">
+                        <span class="stat-name">Creative</span>
+                        <span class="stat-value" id="creativeTotal">0</span>
+                    </div>
+                    <div class="stat-item productive">
+                        <span class="stat-name">Productive</span>
+                        <span class="stat-value" id="productiveTotal">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activities -->
+            <div class="recent-activities">
+                <h2>Recent Activities</h2>
+                <div id="activitiesList" class="activities-list">
+                    <p class="no-activities">No activities yet. Add your first activity above!</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Intensity Guide Modal -->
+    <div id="intensityGuideModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Point Allocation Guidelines</h2>
+                <span class="close-btn" id="closeIntensityGuide">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="guide-section">
+                    <h3>Physical</h3>
+                    <ul>
+                        <li><strong>1 point:</strong> Light activity (10-15 min walk, stretching, taking stairs)</li>
+                        <li><strong>2 points:</strong> Moderate activity (20-30 min walk, light workout, active chores)</li>
+                        <li><strong>3 points:</strong> Good workout (45+ min exercise, gym session, sports game)</li>
+                        <li><strong>4 points:</strong> Intense workout (1+ hour intense exercise, challenging hike, competitive sports)</li>
+                        <li><strong>5 points:</strong> Exceptional effort (marathon training, intense 2+ hour session, major physical challenge)</li>
+                    </ul>
+                </div>
+                <div class="guide-section">
+                    <h3>Mental</h3>
+                    <ul>
+                        <li><strong>1 point:</strong> Light learning (reading article, podcast, quick research)</li>
+                        <li><strong>2 points:</strong> Focused study (30+ min reading, online course lesson, problem-solving)</li>
+                        <li><strong>3 points:</strong> Deep work (1+ hour focused learning, completing course module, skill practice)</li>
+                        <li><strong>4 points:</strong> Intensive mental effort (2+ hours study, complex project work, difficult skill mastery)</li>
+                        <li><strong>5 points:</strong> Major mental achievement (completing course, mastering difficult concept, significant breakthrough)</li>
+                    </ul>
+                </div>
+                <div class="guide-section">
+                    <h3>Social</h3>
+                    <ul>
+                        <li><strong>1 point:</strong> Brief interaction (text conversation, quick call, small talk)</li>
+                        <li><strong>2 points:</strong> Meaningful conversation (30+ min chat, helping someone, group interaction)</li>
+                        <li><strong>3 points:</strong> Quality social time (dinner with friends, family activity, networking event)</li>
+                        <li><strong>4 points:</strong> Significant social effort (hosting event, deep conversation, community involvement)</li>
+                        <li><strong>5 points:</strong> Major social milestone (public speaking, leading event, meaningful relationship building)</li>
+                    </ul>
+                </div>
+                <div class="guide-section">
+                    <h3>Creative</h3>
+                    <ul>
+                        <li><strong>1 point:</strong> Small creative act (doodling, quick photo, brainstorming)</li>
+                        <li><strong>2 points:</strong> Creative practice (30+ min drawing/writing, trying new recipe, decorating)</li>
+                        <li><strong>3 points:</strong> Focused creative work (1+ hour project, completing piece, learning technique)</li>
+                        <li><strong>4 points:</strong> Substantial creative effort (major project progress, performance, complex creation)</li>
+                        <li><strong>5 points:</strong> Creative breakthrough (finishing major work, public display, mastering new medium)</li>
+                    </ul>
+                </div>
+                <div class="guide-section">
+                    <h3>Productive</h3>
+                    <ul>
+                        <li><strong>1 point:</strong> Small task completion (organizing desk, quick admin, simple planning)</li>
+                        <li><strong>2 points:</strong> Moderate productivity (completing to-do items, 1-2 hour work session, planning)</li>
+                        <li><strong>3 points:</strong> Good productivity day (major task completion, 3+ focused hours, system improvement)</li>
+                        <li><strong>4 points:</strong> High productivity (multiple major tasks, full productive day, significant progress)</li>
+                        <li><strong>5 points:</strong> Exceptional productivity (major milestone, system overhaul, extraordinary output)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js?v=1.1"></script>
+    <script src="js/titles.js?v=1.1"></script>
+    <script src="js/star.js?v=1.1"></script>
+    <script src="js/app.js?v=1.1"></script>
+</body>
+</html>
